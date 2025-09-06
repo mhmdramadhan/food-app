@@ -6,6 +6,7 @@ use App\Models\Food;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Table;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -112,5 +113,25 @@ class OrderController extends Controller
             DB::rollBack();
             return response()->json(['message' => 'Gagal menutup order'], 500);
         }
+    }
+
+    public function receipt($id)
+    {
+        $order = Order::with(['items.food', 'table', 'user'])->findOrFail($id);
+
+        if ($order->status !== 'closed') {
+            return response()->json(['message' => 'Order belum ditutup, tidak bisa cetak struk'], 400);
+        }
+
+        // Data untuk PDF
+        $data = [
+            'order' => $order,
+        ];
+
+        // Load view blade untuk PDF
+        $pdf = Pdf::loadView('pdf.receipt', $data);
+
+        // Bisa download atau langsung stream
+        return $pdf->stream("receipt_order_{$order->id}.pdf");
     }
 }

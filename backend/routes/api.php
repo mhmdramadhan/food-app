@@ -33,3 +33,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/orders/{id}/add-item', [OrderController::class, 'addItem']);
     Route::post('/orders/{id}/close', [OrderController::class, 'close']);
 });
+
+Route::middleware('auth:sanctum')->get('/orders/{id}/receipt', [OrderController::class, 'receipt']);
+
