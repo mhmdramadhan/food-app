@@ -25,8 +25,8 @@ sudah dibuat sebelumnya.
 ### 1. Clone Repository
 
 ``` bash
-git clone https://github.com/username/restaurant-pos-frontend.git
-cd restaurant-pos-frontend
+git clone https://github.com/mhmdramadhan/food-app.git
+cd food-app
 ```
 
 ### 2. Install Dependencies

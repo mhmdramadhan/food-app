@@ -29,8 +29,8 @@ utama:
 ### 1. Clone Repository
 
 ``` bash
-git clone https://github.com/mhmdramadhan/food-app
-cd restaurant-pos-api
+git clone https://github.com/mhmdramadhan/food-app.git
+cd food-app
 ```
 
 ### 2. Install Dependencies
