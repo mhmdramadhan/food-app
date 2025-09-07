@@ -16,24 +16,24 @@ const Navbar = () => {
   return (
     <AppBar position="static">
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h6">Restaurant POS</Typography>
+        <Typography variant="h6">Kasir Restorant</Typography>
         <div>
           {user && (
             <>
               {user.role === "pelayan" && (
                 <>
                   <Button color="inherit" component={Link} to="/">
-                    Dashboard
+                    Beranda
                   </Button>
                   <Button color="inherit" component={Link} to="/foods">
-                    Foods
+                    Makanan / Minuman
                   </Button>
                 </>
               )}
               {user.role === "kasir" && (
                 <>
                   <Button color="inherit" component={Link} to="/orders">
-                    Orders
+                    Orderan
                   </Button>
                 </>
               )}

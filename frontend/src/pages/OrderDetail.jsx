@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api/axios";
 import {
@@ -20,6 +20,7 @@ import {
     MenuItem, Select, InputLabel, FormControl
 } from "@mui/material";
 import { useSnackbar } from "../context/SnackbarContext";
+import { AuthContext } from "../context/AuthContext";
 
 
 const OrderDetail = () => {
@@ -31,6 +32,7 @@ const OrderDetail = () => {
     const [quantity, setQuantity] = useState(1);
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
     const { showMessage } = useSnackbar();
+    const { user } = useContext(AuthContext);
 
     const fetchOrder = async () => {
         try {
@@ -94,6 +96,7 @@ const OrderDetail = () => {
 
     if (!order) return <Typography>Loading...</Typography>;
 
+
     return (
         <Container sx={{ mt: 4 }}>
             <Typography variant="h5" gutterBottom>
@@ -124,22 +127,24 @@ const OrderDetail = () => {
                 </TableBody>
             </Table>
 
-            {order.status === "open" && (
-                <>
-                    <Button variant="contained" sx={{ mt: 2, mr: 2 }} onClick={() => setOpenDialog(true)}>
-                        Tambah Item
-                    </Button>
-                    <Button variant="contained" color="error" sx={{ mt: 2 }} onClick={handleCloseOrder}>
-                        Tutup Order
-                    </Button>
-                </>
+            {order.status === "open" && user.role === "pelayan" && (
+                <Button variant="contained" sx={{ mt: 2, mr: 2 }} onClick={() => setOpenDialog(true)}>
+                    Tambah Item
+                </Button>
             )}
 
-            {order.status === "closed" && (
+            {order.status === "open" && user.role === "kasir" && (
+                <Button variant="contained" color="error" sx={{ mt: 2 }} onClick={handleCloseOrder}>
+                    Tutup Order
+                </Button>
+            )}
+
+            {order.status === "closed" && user.role === "kasir" && (
                 <Button variant="contained" sx={{ mt: 2 }} onClick={handleReceipt}>
                     Cetak Struk
                 </Button>
             )}
+
 
             {/* Dialog Tambah Item */}
             <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>

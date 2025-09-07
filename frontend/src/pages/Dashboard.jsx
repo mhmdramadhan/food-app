@@ -72,7 +72,7 @@ const Dashboard = () => {
         return (
             <Container sx={{ mt: 4 }}>
                 <Typography variant="h5">
-                    Halo {user.name}, silakan buka menu Orders untuk mengelola pesanan.
+                    Halo {user.name}, silakan buka menu Orderan untuk mengelola pesanan.
                 </Typography>
             </Container>
         );

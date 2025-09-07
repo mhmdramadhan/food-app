@@ -17,6 +17,7 @@ import {
   Snackbar,
   Alert,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import { useSnackbar } from "../context/SnackbarContext";
@@ -37,7 +38,7 @@ const Foods = () => {
     setLoading(true);
     try {
       const res = await api.get("/foods");
-      showMessage("Makanan berhasil ditambahkan", "success");
+      showMessage("Makanan berhasil dimuat", "success");
       setFoods(res.data);
     } catch (err) {
       console.error(err);
@@ -46,15 +47,8 @@ const Foods = () => {
 
   useEffect(() => {
     fetchFoods();
+    setLoading(false);
   }, []);
-
-  if (user.role !== "pelayan") {
-    return (
-      <Container sx={{ mt: 4 }}>
-        <Typography color="error">Anda tidak punya akses ke halaman ini.</Typography>
-      </Container>
-    );
-  }
 
 
   if (loading) {
@@ -62,6 +56,14 @@ const Foods = () => {
       <Container sx={{ textAlign: "center", mt: 5 }}>
         <CircularProgress />
         <Typography sx={{ mt: 2 }}>Memuat daftar makanan...</Typography>
+      </Container>
+    );
+  }
+
+  if (user.role !== "pelayan") {
+    return (
+      <Container sx={{ mt: 4 }}>
+        <Typography color="error">Anda tidak punya akses ke halaman ini.</Typography>
       </Container>
     );
   }
@@ -112,7 +114,7 @@ const Foods = () => {
   return (
     <Container sx={{ mt: 4 }}>
       <Typography variant="h5" gutterBottom>
-        Master Foods
+        Daftar Makanan dan Minuman
       </Typography>
 
       <Button variant="contained" color="primary" onClick={() => handleOpenDialog()}>
