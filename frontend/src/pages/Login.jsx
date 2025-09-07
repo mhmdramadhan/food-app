@@ -17,6 +17,10 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!email || !password) {
+      setError("Email dan Password wajib diisi");
+      return;
+    }
     setLoading(true);
     setError(null);
 

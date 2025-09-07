@@ -19,6 +19,9 @@ import {
   IconButton,
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
+import { useSnackbar } from "../context/SnackbarContext";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const Foods = () => {
   const [foods, setFoods] = useState([]);
@@ -26,10 +29,15 @@ const Foods = () => {
   const [editingFood, setEditingFood] = useState(null);
   const [form, setForm] = useState({ name: "", price: "", category: "" });
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [loading, setLoading] = useState(true);
+  const { showMessage } = useSnackbar();
+  const { user } = useContext(AuthContext);
 
   const fetchFoods = async () => {
+    setLoading(true);
     try {
       const res = await api.get("/foods");
+      showMessage("Makanan berhasil ditambahkan", "success");
       setFoods(res.data);
     } catch (err) {
       console.error(err);
@@ -39,6 +47,24 @@ const Foods = () => {
   useEffect(() => {
     fetchFoods();
   }, []);
+
+  if (user.role !== "pelayan") {
+    return (
+      <Container sx={{ mt: 4 }}>
+        <Typography color="error">Anda tidak punya akses ke halaman ini.</Typography>
+      </Container>
+    );
+  }
+
+
+  if (loading) {
+    return (
+      <Container sx={{ textAlign: "center", mt: 5 }}>
+        <CircularProgress />
+        <Typography sx={{ mt: 2 }}>Memuat daftar makanan...</Typography>
+      </Container>
+    );
+  }
 
   const handleOpenDialog = (food = null) => {
     setEditingFood(food);
@@ -53,6 +79,10 @@ const Foods = () => {
   };
 
   const handleSave = async () => {
+    if (!form.name || !form.price) {
+      showMessage("Nama dan harga wajib diisi", "error");
+      return;
+    }
     try {
       if (editingFood) {
         await api.put(`/foods/${editingFood.id}`, form);

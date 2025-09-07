@@ -37,9 +37,11 @@ const Orders = () => {
     return (
       <Container sx={{ textAlign: "center", mt: 5 }}>
         <CircularProgress />
+        <Typography sx={{ mt: 2 }}>Memuat data order...</Typography>
       </Container>
     );
   }
+
 
   return (
     <Container sx={{ mt: 4 }}>

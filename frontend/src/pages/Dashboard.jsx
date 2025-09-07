@@ -12,12 +12,15 @@ import {
     Snackbar,
     Alert,
 } from "@mui/material";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const Dashboard = () => {
     const [tables, setTables] = useState([]);
     const [loading, setLoading] = useState(true);
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
     const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
 
     const fetchTables = async () => {
         try {
@@ -61,6 +64,16 @@ const Dashboard = () => {
         return (
             <Container sx={{ textAlign: "center", mt: 5 }}>
                 <CircularProgress />
+            </Container>
+        );
+    }
+
+    if (user.role === "kasir") {
+        return (
+            <Container sx={{ mt: 4 }}>
+                <Typography variant="h5">
+                    Halo {user.name}, silakan buka menu Orders untuk mengelola pesanan.
+                </Typography>
             </Container>
         );
     }

@@ -19,6 +19,8 @@ import {
     Alert,
     MenuItem, Select, InputLabel, FormControl
 } from "@mui/material";
+import { useSnackbar } from "../context/SnackbarContext";
+
 
 const OrderDetail = () => {
     const { id } = useParams();
@@ -28,10 +30,12 @@ const OrderDetail = () => {
     const [foodId, setFoodId] = useState("");
     const [quantity, setQuantity] = useState(1);
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+    const { showMessage } = useSnackbar();
 
     const fetchOrder = async () => {
         try {
             const res = await api.get(`/orders/${id}`);
+            showMessage("Order berhasil dimuat", "success");
             setOrder(res.data);
         } catch (err) {
             console.error(err);
@@ -53,26 +57,34 @@ const OrderDetail = () => {
     }, [id]);
 
     const handleAddItem = async () => {
+        if (!foodId) {
+            showMessage("Pilih makanan dulu", "error");
+            return;
+        }
+        if (quantity <= 0) {
+            showMessage("Quantity harus lebih dari 0", "error");
+            return;
+        }
         try {
             await api.post(`/orders/${id}/add-item`, {
                 food_id: foodId,
                 quantity: Number(quantity),
             });
-            setSnackbar({ open: true, message: "Item berhasil ditambahkan", severity: "success" });
+            showMessage("Item berhasil ditambahkan", "success");
             setOpenDialog(false);
             fetchOrder();
         } catch (err) {
-            setSnackbar({ open: true, message: "Gagal menambah item", severity: "error" });
+            showMessage("Gagal menambah item", "error");
         }
     };
 
     const handleCloseOrder = async () => {
         try {
             await api.post(`/orders/${id}/close`);
-            setSnackbar({ open: true, message: "Order berhasil ditutup", severity: "success" });
+            showMessage("Order berhasil ditutup", "success");
             fetchOrder();
         } catch (err) {
-            setSnackbar({ open: true, message: "Gagal menutup order", severity: "error" });
+            showMessage("Gagal menutup order", "error");
         }
     };
 

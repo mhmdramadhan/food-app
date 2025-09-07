@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -19,9 +20,23 @@ const Navbar = () => {
         <div>
           {user && (
             <>
-              <Typography variant="body1" component="span" sx={{ mr: 2 }}>
-                {user.name} ({user.role})
-              </Typography>
+              {user.role === "pelayan" && (
+                <>
+                  <Button color="inherit" component={Link} to="/">
+                    Dashboard
+                  </Button>
+                  <Button color="inherit" component={Link} to="/foods">
+                    Foods
+                  </Button>
+                </>
+              )}
+              {user.role === "kasir" && (
+                <>
+                  <Button color="inherit" component={Link} to="/orders">
+                    Orders
+                  </Button>
+                </>
+              )}
               <Button color="inherit" onClick={handleLogout}>
                 Logout
               </Button>
