@@ -88,15 +88,18 @@ const Foods = () => {
     try {
       if (editingFood) {
         await api.put(`/foods/${editingFood.id}`, form);
-        setSnackbar({ open: true, message: "Makanan berhasil diupdate", severity: "success" });
+        showMessage("Makanan berhasil diupdate", "success");
       } else {
         await api.post("/foods", form);
-        setSnackbar({ open: true, message: "Makanan berhasil ditambahkan", severity: "success" });
+        
+        showMessage("Makanan berhasil ditambahkan", "success");
       }
       fetchFoods();
+      setLoading(false);
       handleCloseDialog();
     } catch (err) {
-      setSnackbar({ open: true, message: "Gagal menyimpan makanan", severity: "error" });
+      setLoading(false);
+      showMessage("Gagal menyimpan makanan", "error");
     }
   };
 
@@ -105,9 +108,12 @@ const Foods = () => {
     try {
       await api.delete(`/foods/${id}`);
       setSnackbar({ open: true, message: "Makanan berhasil dihapus", severity: "success" });
+      setLoading(false);
+      showMessage("Makanan berhasil dihapus", "success");
       fetchFoods();
     } catch (err) {
-      setSnackbar({ open: true, message: "Gagal menghapus makanan", severity: "error" });
+      showMessage("Gagal menghapus makanan", "error");
+      setLoading(false);
     }
   };
 
