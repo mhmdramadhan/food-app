@@ -16,7 +16,7 @@ const Navbar = () => {
   return (
     <AppBar position="static">
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h6">Kasir Restorant</Typography>
+        <Typography variant="h6">RestourantPOS</Typography>
         <div>
           {user && (
             <>
